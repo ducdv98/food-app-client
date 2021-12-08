@@ -20,7 +20,6 @@ const login = (phone_number, password) => {
 };
 
 const logout = () => {
-    console.log(authHeader());
     return axios.post(API_URL + 'users/logoutall', {}, { headers: authHeader() });
 };
 
