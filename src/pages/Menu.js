@@ -3,11 +3,15 @@ import { useDispatch, useSelector } from "react-redux"
 import DishCollection from "../components/DishCollection";
 import { getCategories, getDishes } from "../store/dish.store";
 import * as _ from 'lodash';
+import { getCart } from "../store/cart.store";
 
 export default function Menu() {
 
     const dispatch = useDispatch();
-    const { loading } = useSelector(state => state.dishes);
+    const loading = useSelector(state => {
+        const { dishLoading, categoryLoading } = state.dishes;
+        return dishLoading && categoryLoading;
+    });
     const groupedDishes = useSelector(state => {
         if (_.isEmpty(state.dishes.dishes) && _.isEmpty(state.dishes.categories)) {
             return [];
@@ -31,6 +35,7 @@ export default function Menu() {
     useEffect(() => {
         dispatch(getDishes()).unwrap();
         dispatch(getCategories()).unwrap();
+        dispatch(getCart()).unwrap();
     }, []);
 
     return (
