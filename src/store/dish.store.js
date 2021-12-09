@@ -65,6 +65,33 @@ export const getCategories = createAsyncThunk(
     }
 );
 
+export const getDishById = createAsyncThunk(
+    "dishes/getDishById",
+    async (id, thunkAPI) => {
+        try {
+            const response = await DishService.getDishById(id);
+            return response.data;
+        } catch (error) {
+            const message = (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+                error.message ||
+                error.toString();
+
+            toast.error('Có lỗi xảy ra, vui lòng thử lại!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
+
 const dishSlice = createSlice({
     name: "dishes",
     initialState,
@@ -90,6 +117,24 @@ const dishSlice = createSlice({
         });
         builder.addCase(getCategories.rejected, (state, action) => {
             state.categoryLoading = false;
+            state.error = action.payload
+        });
+
+        builder.addCase(getDishById.pending, (state, action) => {
+            state.dishLoading = true;
+        });
+        builder.addCase(getDishById.fulfilled, (state, action) => {
+            state.dishLoading = false;
+
+            const result = action.payload;
+
+            const dish = state.dishes.find(d => d.id.localeCompare(result.id) === 0);
+            if (!dish) {
+                state.dishes.push(result);
+            }
+        });
+        builder.addCase(getDishById.rejected, (state, action) => {
+            state.dishLoading = false;
             state.error = action.payload
         });
     },
