@@ -15,6 +15,7 @@ import Footer from "./components/Footer";
 import Landing from "./pages/Landing";
 import DishDetails from "./pages/DishDetails";
 import Cart from "./pages/Cart";
+import OrderSummary from "./pages/OrderSumary";
 
 const App = () => {
   const { user } = useSelector((state) => state.auth);
@@ -53,6 +54,7 @@ const App = () => {
           <Route exact path={['/', '/menu']} component={Menu} />
           <Route exact path={'/dishes/:id'} component={DishDetails} />
           <Route exact path={'/cart/'} component={Cart} />
+          <Route exact path={'/order-summary/'} component={OrderSummary} />
         </PrivateRoute>
 
       </Switch>
