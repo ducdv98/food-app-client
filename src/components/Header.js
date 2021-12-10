@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
 
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
@@ -9,10 +9,6 @@ import { logout } from "../store/auth.store";
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
-
-const userNavigation = [
-    { name: 'Sign out' },
-]
 
 const navigation = [
     { name: 'Solutions', href: '#' },
@@ -25,20 +21,26 @@ export default function Header() {
     const { user } = useSelector((state) => state.auth);
     const { items } = useSelector(state => state.cart);
     const dispatch = useDispatch();
+    const history = useHistory();
+
+    const userNavigation = [
+        { name: 'Đơn hàng của tôi', action: () => history.push('orders') },
+        { name: 'Đăng xuất', action: () => dispatch(logout()) },
+    ];
 
     return (
         <header className="bg-indigo-600">
             <nav className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Top">
                 <div className="w-full py-6 flex items-center justify-between border-b border-indigo-500 lg:border-none">
                     <div className="flex items-center">
-                        <a href="#">
+                        <Link to='/'>
                             <span className="sr-only">Workflow</span>
                             <img
                                 className="h-10 w-auto"
                                 src="https://tailwindui.com/img/logos/workflow-mark.svg?color=white"
                                 alt=""
                             />
-                        </a>
+                        </Link>
                         <div className="hidden ml-10 space-x-8 lg:block">
                             {navigation.map((link) => (
                                 <a key={link.name} href={link.href} className="text-base font-medium text-white hover:text-indigo-50">
@@ -86,7 +88,7 @@ export default function Header() {
                                                             active ? 'bg-gray-100' : '',
                                                             'block px-4 py-2 text-sm text-gray-700'
                                                         )}
-                                                        onClick={() => dispatch(logout())}
+                                                        onClick={item.action ? item.action : () => { }}
                                                     >
                                                         {item.name}
                                                     </a>
@@ -96,7 +98,7 @@ export default function Header() {
                                     </Menu.Items>
                                 </Transition>
                             </Menu>
-                            : <div className="ml-10 space-x-4">
+                            : <div className={classNames(!user ? 'ml-10 space-x-4' : 'hidden')}>
                                 <Link
                                     to='login'
                                     className="inline-block bg-indigo-500 py-2 px-4 border border-transparent rounded-md text-base font-medium text-white hover:bg-opacity-75"
@@ -113,7 +115,7 @@ export default function Header() {
                         }
 
                         <div className="ml-4 flow-root lg:ml-6">
-                            <Link to="/cart" className="group -m-2 p-2 flex items-center">
+                            <Link to="/cart" className={classNames(user ? 'group -m-2 p-2 flex items-center' : 'hidden')}>
                                 <ShoppingBagIcon
                                     className="flex-shrink-0 h-6 w-6 text-white group-hover:text-gray-500"
                                     aria-hidden="true"
@@ -134,6 +136,6 @@ export default function Header() {
                     ))}
                 </div>
             </nav>
-        </header>
+        </header >
     )
 }
