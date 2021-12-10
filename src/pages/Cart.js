@@ -12,6 +12,8 @@ import ChooseAmount from "../components/ChooseAmount";
 import { humanziePrice } from "../common/ultis";
 import { phoneRegExp } from "../common/regex-patterns";
 import { createOrder } from "../store/order.store";
+import EmptyList from "../components/EmptyList";
+import { classNames } from "../common/class-names";
 
 const CartItem = ({ item, onUpdateItem }) => {
     const onAmountChange = (amount) => {
@@ -155,18 +157,21 @@ export default function Cart() {
     }
 
     const getCartItems = () => {
-        return <div className="h-full flex flex-col bg-white overflow-y-auto w-2/5">
-            <div className="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
+        return <div className={classNames(items.length > 0 ? 'w-2/5' : 'w-full', 'h-full flex flex-col bg-white overflow-y-auto ')}>
+            <div className="flex-1 overflow-y-auto px-4">
                 <div className="flex items-start justify-between">
                     <div className="text-lg font-medium text-gray-900">Giỏ hàng</div>
                 </div>
 
                 <div className="mt-8">
-                    <div className="flow-root">
-                        <ul role="list" className="divide-y divide-gray-200">
-                            {items.map((item) => <CartItem key={item.id} item={item} onUpdateItem={onUpdateCart} />)}
-                        </ul>
-                    </div>
+                    {items.length > 0 ?
+                        <div className="flow-root">
+                            <ul role="list" className="divide-y divide-gray-200">
+                                {items.map((item) => <CartItem key={item.id} item={item} onUpdateItem={onUpdateCart} />)}
+                            </ul>
+                        </div>
+                        : <EmptyList title="Giỏ hàng của bạn chưa có món ăn nào." />
+                    }
                 </div>
             </div>
 
@@ -182,12 +187,12 @@ export default function Cart() {
         const total = subTotal + shippingFee;
 
         return (
-            <div className="w-3/5">
+            <div className={classNames(items.length > 0 ? 'w-3/5' : 'hidden')}>
                 <Formik initialValues={{ name: '', phone_number: '', address: '' }}
                     validationSchema={validationSchema}
                     onSubmit={onSumbit}>
                     <Form>
-                        <div className="py-6 text-lg font-medium text-gray-600">Thông tin nhận hàng</div>
+                        <div className="text-lg font-medium text-gray-600 mb-12">Thông tin nhận hàng</div>
                         <div className="w-full bg-gray-100 rounded px-4 divide-y divide-gray-300">
                             <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:py-5">
                                 <label htmlFor="first-name" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
@@ -321,9 +326,9 @@ export default function Cart() {
     }
 
     return (
-        <div className="w-full flex justify-between mb-6 flex-row gap-8 max-w-2xl mx-auto py-4 px-4 sm:px-6 lg:max-w-7xl lg:px-8 shadow-lg my-12">
+        <div className="w-full py-8 px-4 flex justify-between mb-6 flex-row gap-8 max-w-2xl mx-auto sm:px-6 lg:max-w-7xl lg:px-8 shadow-lg my-12">
             {getCartItems()}
             {getCartInfo()}
-        </div>
+        </div >
     )
 }

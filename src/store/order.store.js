@@ -37,6 +37,33 @@ export const createOrder = createAsyncThunk(
     }
 );
 
+export const getOrders = createAsyncThunk(
+    "orders/getOrders",
+    async (_, thunkAPI) => {
+        try {
+            const response = await OrderService.getOrders();
+            return response.data;
+        } catch (error) {
+            const message = (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+                error.message ||
+                error.toString();
+
+            toast.error('Có lỗi xảy ra, vui lòng thử lại!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
+
 const orderSlice = createSlice({
     name: "orders",
     initialState,
@@ -50,6 +77,18 @@ const orderSlice = createSlice({
             state.orders.push(action.payload)
         });
         builder.addCase(createOrder.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload
+        });
+
+        builder.addCase(getOrders.pending, (state, action) => {
+            state.loading = true;
+        });
+        builder.addCase(getOrders.fulfilled, (state, action) => {
+            state.loading = false;
+            state.orders = action.payload;
+        });
+        builder.addCase(getOrders.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload
         });
