@@ -44,11 +44,11 @@ const OrderItem = ({ order }) => {
             </div>
             <div className="hidden sm:flex flex-col flex-shrink-0 items-end space-y-3">
                 <p className="flex items-center space-x-4">
-                    <a
+                    <span
                         className="relative text-sm text-gray-500 hover:text-gray-900 font-medium"
                     >
                         {timeStamp}
-                    </a>
+                    </span>
                 </p>
                 <p className="flex text-gray-500 text-sm space-x-2 items-center">
                     <span className="flex items-center gap-1">
@@ -99,7 +99,7 @@ export default function Orders() {
             {
                 orders ?
                     (orders.length > 0
-                        ? <ul role="list" className="relative z-0 divide-y divide-gray-200 border-t border-gray-200">
+                        ? <ul className="relative z-0 divide-y divide-gray-200 border-t border-gray-200">
                             {orders.map((order) => <OrderItem key={order.id} order={order} />)}
                         </ul>
                         : <EmptyList title="Danh sách rỗng" subTilte="Bạn chưa có đơn hàng nào." />)

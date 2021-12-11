@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux"
 import DishCollection from "../components/DishCollection";
 import { getCategories, getDishes } from "../store/dish.store";
 import * as _ from 'lodash';
-import { getCart } from "../store/cart.store";
 
 export default function Menu() {
 

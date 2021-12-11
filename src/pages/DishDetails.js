@@ -14,11 +14,6 @@ export default function DisDetails() {
     const dish = useSelector(state => state.dishes.dishes.find(d => d.id.localeCompare(id) === 0));
     const categories = useSelector(state => state.dishes.categories);
 
-    const loading = useSelector(state => {
-        const { dishLoading, categoryLoading } = state.dishes;
-        return dishLoading && categoryLoading;
-    });
-
     const [note, setNote] = useState('');
     const [amount, setAmount] = useState(1);
 
@@ -43,12 +38,12 @@ export default function DisDetails() {
             const categoryName = categories.find(c => c.id.localeCompare(dish.category))?.name;
 
             return <nav aria-label="Breadcrumb">
-                <ol role="list" className="max-w-2xl mx-auto px-4 flex items-center space-x-2 sm:px-6 lg:max-w-7xl lg:px-8">
+                <ol className="max-w-2xl mx-auto px-4 flex items-center space-x-2 sm:px-6 lg:max-w-7xl lg:px-8">
                     <li>
                         <div className="flex items-center">
-                            <a className="mr-2 text-sm font-medium text-gray-900">
+                            <span className="mr-2 text-sm font-medium text-gray-900">
                                 {categoryName}
-                            </a>
+                            </span>
                             <svg
                                 width={16}
                                 height={20}
@@ -63,9 +58,9 @@ export default function DisDetails() {
                         </div>
                     </li>
                     <li className="text-sm">
-                        <a aria-current="page" className="font-medium text-gray-500 hover:text-gray-600">
+                        <span aria-current="page" className="font-medium text-gray-500 hover:text-gray-600">
                             {dish.name}
-                        </a>
+                        </span>
                     </li>
                 </ol>
             </nav>

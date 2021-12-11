@@ -1,7 +1,7 @@
 import axios from "axios";
 import authHeader from "./auth-header";
+import { API_URL } from "./api-url";
 
-const API_URL = "http://localhost:5000/api/v1/";
 
 const register = (name, phone_number, password) => {
     return axios.post(API_URL + 'users/', {
