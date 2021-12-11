@@ -24,7 +24,7 @@ export default function Header() {
     const history = useHistory();
 
     const userNavigation = [
-        { name: 'Đơn hàng của tôi', action: () => history.push('orders') },
+        { name: 'Đơn hàng của tôi', action: () => history.push('/orders')},
         { name: 'Đăng xuất', action: () => dispatch(logout()) },
     ];
 

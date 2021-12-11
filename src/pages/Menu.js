@@ -35,7 +35,6 @@ export default function Menu() {
     useEffect(() => {
         dispatch(getDishes()).unwrap();
         dispatch(getCategories()).unwrap();
-        dispatch(getCart()).unwrap();
     }, []);
 
     return (

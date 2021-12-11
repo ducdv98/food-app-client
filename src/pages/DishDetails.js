@@ -7,7 +7,7 @@ import { updateCart } from '../store/cart.store';
 import { humanziePrice } from '../common/ultis';
 
 export default function DisDetails() {
-    let { id } = useParams();
+    const { id } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
 
