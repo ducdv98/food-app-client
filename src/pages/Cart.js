@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import * as _ from 'lodash';
 import { Link } from "react-router-dom";
@@ -169,7 +169,7 @@ export default function Cart() {
                 <div className="mt-8">
                     {items.length > 0 ?
                         <div className="flow-root">
-                            <ul role="list" className="divide-y divide-gray-200">
+                            <ul className="divide-y divide-gray-200">
                                 {items.map((item) => <CartItem key={item.id} item={item} onUpdateItem={onUpdateCart} />)}
                             </ul>
                         </div>

@@ -12,7 +12,6 @@ import Register from "./pages/Register";
 import Menu from "./pages/Menu";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import Landing from "./pages/Landing";
 import DishDetails from "./pages/DishDetails";
 import Cart from "./pages/Cart";
 import OrderSummary from "./pages/OrderSumary";

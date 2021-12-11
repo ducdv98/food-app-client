@@ -9,9 +9,9 @@ const DishSkeleton = (key) => {
         <div className="mt-4 flex justify-between">
             <div>
                 <h3 className="text-sm text-gray-700">
-                    <a>
+                    <span>
                         <span aria-hidden="true" className="absolute inset-0" />
-                    </a>
+                    </span>
                 </h3>
             </div>
             <div className="h-6 bg-gray-200 rounded w-full"></div>

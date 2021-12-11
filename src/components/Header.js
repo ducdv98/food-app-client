@@ -1,10 +1,11 @@
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { ShoppingBagIcon } from '@heroicons/react/outline'
 import { logout } from "../store/auth.store";
+import { getCart } from "../store/cart.store"
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -23,8 +24,14 @@ export default function Header() {
     const dispatch = useDispatch();
     const history = useHistory();
 
+    useEffect(() => {
+        if (user) {
+            dispatch(getCart()).unwrap();
+        }
+    }, [user]);
+
     const userNavigation = [
-        { name: 'Đơn hàng của tôi', action: () => history.push('/orders')},
+        { name: 'Đơn hàng của tôi', action: () => history.push('/orders') },
         { name: 'Đăng xuất', action: () => dispatch(logout()) },
     ];
 
@@ -83,7 +90,7 @@ export default function Header() {
                                         {userNavigation.map((item) => (
                                             <Menu.Item key={item.name}>
                                                 {({ active }) => (
-                                                    <a
+                                                    <span
                                                         className={classNames(
                                                             active ? 'bg-gray-100' : '',
                                                             'block px-4 py-2 text-sm text-gray-700'
@@ -91,7 +98,7 @@ export default function Header() {
                                                         onClick={item.action ? item.action : () => { }}
                                                     >
                                                         {item.name}
-                                                    </a>
+                                                    </span>
                                                 )}
                                             </Menu.Item>
                                         ))}

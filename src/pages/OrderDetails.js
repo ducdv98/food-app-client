@@ -6,6 +6,7 @@ import { getDishes } from '../store/dish.store';
 import { getOrderById, reorder } from '../store/order.store';
 import { humanziePrice } from '../common/ultis';
 import { OrderStatusBadge } from '../components/OrderStatusBadge';
+import { OrderStatus } from '../common/order-status';
 
 const OrderItem = ({ item }) => {
 
@@ -124,18 +125,21 @@ export default function OrderDetails() {
                                         </div>
                                         <div className='flex flex-col items-end justify-between'>
                                             <p className="max-w-2xl text-sm text-gray-500">{getTimeStamp()}</p>
-                                            <button
-                                                onClick={() => onReorder()}
-                                                type="button"
-                                                className="inline-flex items-center px-4 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-                                            >
-                                                Đặt lại
-                                            </button>
+                                            {order && (order.status === OrderStatus.CANCELLED || order.status === OrderStatus.DELIVERED)
+                                                ? <button
+                                                    onClick={() => onReorder()}
+                                                    type="button"
+                                                    className="inline-flex items-center px-4 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                                                >
+                                                    Đặt lại
+                                                </button>
+                                                : null
+                                            }
                                         </div>
                                     </div>
                                     <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
                                         <div className="flow-root">
-                                            <ul role="list" className="divide-y divide-gray-200">
+                                            <ul className="divide-y divide-gray-200">
                                                 {items.map((item) => <OrderItem key={item.id} item={item} />)}
                                             </ul>
                                         </div>
