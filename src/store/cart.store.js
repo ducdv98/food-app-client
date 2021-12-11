@@ -5,6 +5,7 @@ import CartService from "../services/cart.service";
 
 const initialState = {
     items: [],
+    delivery_info: null,
     loading: false,
     error: null
 }
@@ -63,6 +64,33 @@ export const updateCart = createAsyncThunk(
     }
 );
 
+export const getDeliveryInfo = createAsyncThunk(
+    "cart/getDeliveryInfo",
+    async (_, thunkAPI) => {
+        try {
+            const response = await CartService.getDeliveryInfo();
+            return response.data;
+        } catch (error) {
+            const message = (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+                error.message ||
+                error.toString();
+
+            toast.error('Có lỗi xảy ra, vui lòng thử lại!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
+
 const dishSlice = createSlice({
     name: "cart",
     initialState,
@@ -87,6 +115,18 @@ const dishSlice = createSlice({
             state.items = action.payload;
         });
         builder.addCase(updateCart.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload
+        });
+
+        builder.addCase(getDeliveryInfo.pending, (state, action) => {
+            state.loading = true;
+        });
+        builder.addCase(getDeliveryInfo.fulfilled, (state, action) => {
+            state.loading = false;
+            state.delivery_info = action.payload;
+        });
+        builder.addCase(getDeliveryInfo.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload
         });

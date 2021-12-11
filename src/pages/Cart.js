@@ -1,11 +1,11 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import * as _ from 'lodash';
 import { Link } from "react-router-dom";
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { useHistory } from "react-router-dom";
-import { getCart, updateCart } from "../store/cart.store";
+import { getCart, getDeliveryInfo, updateCart } from "../store/cart.store";
 
 import { getDishes } from "../store/dish.store";
 import ChooseAmount from "../components/ChooseAmount";
@@ -103,9 +103,11 @@ export default function Cart() {
     const dispatch = useDispatch();
     const history = useHistory();
 
+
     useEffect(() => {
         dispatch(getDishes()).unwrap();
         dispatch(getCart()).unwrap();
+        dispatch(getDeliveryInfo()).unwrap();
     }, []);
 
     const validationSchema = Yup.object().shape({
@@ -125,6 +127,8 @@ export default function Cart() {
         address: Yup.string()
             .required("Địa chỉ không được để trống!"),
     });
+
+    const { delivery_info } = useSelector(state => state.cart);
 
     const items = useSelector(state => {
         const cartItems = state.cart.items;
@@ -150,7 +154,6 @@ export default function Cart() {
         await dispatch(createOrder(delivery_info)).unwrap();;
         history.replace('/order-summary');
     };
-
 
     const onUpdateCart = (update) => {
         dispatch(updateCart(update)).unwrap();
@@ -188,8 +191,13 @@ export default function Cart() {
 
         return (
             <div className={classNames(items.length > 0 ? 'w-3/5' : 'hidden')}>
-                <Formik initialValues={{ name: '', phone_number: '', address: '' }}
+                <Formik initialValues={delivery_info || {
+                    name: '',
+                    phone_number: '',
+                    address: ''
+                }}
                     validationSchema={validationSchema}
+                    enableReinitialize
                     onSubmit={onSumbit}>
                     <Form>
                         <div className="text-lg font-medium text-gray-600 mb-12">Thông tin nhận hàng</div>
